@@ -9,6 +9,7 @@ export default class extends BaseSchema {
       table.integer('usuario_id').references('id').inTable('users').notNullable().unsigned()
       table.integer('receta_id').references('id').inTable('recetas').notNullable().unsigned()
       table.text('contenido').notNullable()
+      table.timestamp('fecha_comentario')
       table.timestamp('created_at', { useTz: true }).notNullable()
       table.timestamp('updated_at', { useTz: true }).notNullable()
     })
