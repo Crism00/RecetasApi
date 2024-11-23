@@ -14,8 +14,7 @@ export default class extends BaseSchema {
       table.string('tiempo_preparacion').notNullable()
       table.date('fecha_publicacion').notNullable()
       table.string('imagen').nullable()
-      table.timestamp('created_at', { useTz: true }).notNullable()
-      table.timestamp('updated_at', { useTz: true }).notNullable()
+      table.timestamps()
     })
   }
 
