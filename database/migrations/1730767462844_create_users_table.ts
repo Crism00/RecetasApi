@@ -12,8 +12,7 @@ export default class extends BaseSchema {
       table.string('biografia').nullable()
       table.string('imagen').nullable()
       table.timestamp('fecha_registro')
-      table.timestamp('created_at').notNullable()
-      table.timestamp('updated_at').nullable()
+      table.timestamps()
     })
   }
 

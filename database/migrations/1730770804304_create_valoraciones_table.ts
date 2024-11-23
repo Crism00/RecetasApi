@@ -10,8 +10,7 @@ export default class extends BaseSchema {
       table.integer('receta_id').references('id').inTable('recetas').notNullable().unsigned()
       table.integer('puntuacion').notNullable()
       table.timestamp('fecha_valoracion')
-      table.timestamp('created_at', { useTz: true }).notNullable()
-      table.timestamp('updated_at', { useTz: true }).notNullable()
+      table.timestamps()
     })
   }
 
