@@ -17,4 +17,22 @@ export default class CategoriasController {
       msg: 'Hubo un error al guardar la categoria',
     })
   }
+
+  async index({ response }: HttpContext) {
+    const categorias = await Categoria.all()
+    return response.status(200).json({
+      categorias,
+    })
+  }
+
+  async update({ request, response, params }: HttpContext) {
+    const payload = await request.validateUsing(storeValidator)
+    const categoria = await Categoria.findOrFail(params.id)
+    categoria.merge(payload)
+    await categoria.save()
+    return response.status(200).json({
+      msg: 'Categoria actualizada correctamente',
+      categoria,
+    })
+  }
 }
