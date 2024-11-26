@@ -9,17 +9,19 @@ export const storeValidator = vine.compile(
   })
 )
 
-export const updateValidator = (params: { id: any }) =>
+export const updateValidator = (params: { id: number }) =>
   vine.compile(
     vine.object({
       nombre: vine.string().unique(async (db, value, field) => {
-        const categoria = await db.from('categorias').where('nombre', value).first()
-        if (categoria) {
-          // Permitir el mismo nombre si se está editando la misma categoría
-          return !(categoria.id === params.id)
-        } else {
-          return true
+        if (!params.id) {
+          throw new Error('El parámetro id es requerido')
         }
+        const categoria = await db
+          .from('categorias')
+          .where('nombre', value)
+          .whereNot('id', params.id)
+          .first()
+        return !categoria
       }),
     })
   )

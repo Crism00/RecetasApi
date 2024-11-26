@@ -24,8 +24,11 @@ export default class CategoriasController {
   }
 
   async update({ request, response, params }: HttpContext) {
-    const payload = await request.validateUsing(updateValidator(params.id))
-    const categoria = await Categoria.findOrFail(params.id)
+    const categoria = await Categoria.find(params.id)
+    if (!categoria) {
+      return response.status(404).json(standardResponse(404, 'Categoria no encontrada'))
+    }
+    const payload = await request.validateUsing(updateValidator({ id: params.id }))
     categoria.merge(payload)
     if (await categoria.save()) {
       return response

@@ -24,11 +24,11 @@ export default class AuthController {
     const payload = await request.validateUsing(loginValidator)
     const user = await User.findBy('email', payload.email)
     if (!user) {
-      return response.status(401).json(standardResponse(401, 'Usuario no encontrado'))
+      return response.status(401).json(standardResponse(401, 'Error en las credenciales'))
     }
     const isPasswordValid = await hash.verify(user.password, payload.password)
     if (!isPasswordValid) {
-      return response.status(401).json(standardResponse(401, 'La contraseña es incorrecta'))
+      return response.status(401).json(standardResponse(401, 'Error en las credenciales'))
     }
     const token = await User.accessTokens.create(user, ['*'], { expiresIn: '30 days' })
     return response
