@@ -12,9 +12,9 @@ export const storeValidator = vine.compile(
       const categoria = await db.from('categorias').where('id', value).first()
       return !!categoria
     }),
-    dificultad: vine.string(),
-    tiempo_preparacion: vine.string(),
-    fecha_publicacion: vine.string(),
+    dificultad: vine.string().in(['facil', 'medio', 'dificil']),
+    tiempo_preparacion: vine.number(),
+    fecha_publicacion: vine.date(),
     imagen: vine.string(),
   })
 )

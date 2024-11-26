@@ -1,5 +1,5 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import { storeValidator } from '#validators/categoria'
+import { storeValidator, updateValidator } from '#validators/categoria'
 import Categoria from '#models/categoria'
 import { standardResponse } from '../helpers/response.js'
 
@@ -24,12 +24,13 @@ export default class CategoriasController {
   }
 
   async update({ request, response, params }: HttpContext) {
-    const payload = await request.validateUsing(storeValidator)
+    const payload = await request.validateUsing(updateValidator(params.id))
     const categoria = await Categoria.findOrFail(params.id)
     categoria.merge(payload)
-    await categoria.save()
-    return response
-      .status(200)
-      .json(standardResponse(200, 'Categoria actualizada correctamente', { categoria }))
+    if (await categoria.save()) {
+      return response
+        .status(200)
+        .json(standardResponse(200, 'Categoria actualizada correctamente', { categoria }))
+    }
   }
 }

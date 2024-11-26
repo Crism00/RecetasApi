@@ -17,9 +17,15 @@ export default class RecetasController {
       msg: 'Hubo un error al guardar la receta',
     })
   }
+  async index({ request, response }: HttpContext) {
+    let recetasQuery = Receta.query().preload('user')
 
-  async index({ response }: HttpContext) {
-    const recetas = await Receta.all()
+    const categoria = request.qs().categoria
+    if (categoria) {
+      recetasQuery = recetasQuery.where('categoria_id', categoria)
+    }
+
+    const recetas = await recetasQuery.exec()
     return response
       .status(200)
       .json(standardResponse(200, 'Recetas obtenidas correctamente', { recetas }))
