@@ -4,6 +4,7 @@ import Categoria from './categoria.js'
 import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import User from './user.js'
 import Valoracion from './valoracion.js'
+import Comentario from './comentario.js'
 
 export default class Receta extends BaseModel {
   @column({ isPrimary: true })
@@ -48,6 +49,9 @@ export default class Receta extends BaseModel {
 
   @hasMany(() => Valoracion)
   declare valoraciones: HasMany<typeof Valoracion>
+
+  @hasMany(() => Comentario)
+  declare comentarios: HasMany<typeof Comentario>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

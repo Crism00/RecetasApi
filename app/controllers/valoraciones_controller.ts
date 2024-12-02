@@ -12,10 +12,10 @@ export default class ValoracionesController {
 
     // Crear una nueva valoración
     const valoracion = new Valoracion()
-    valoracion.receta_id = payload.receta_id
+    valoracion.recetaId = payload.receta_id
     valoracion.puntuacion = payload.puntuacion
     if (auth.user?.id !== undefined) {
-      valoracion.usuario_id = auth.user.id
+      valoracion.usuarioId = auth.user.id
     } else {
       return response.status(401).json(standardResponse(401, 'Usuario no autenticado'))
     }
@@ -39,6 +39,8 @@ export default class ValoracionesController {
     }
 
     // Responder con la valoración creada
-    return response.status(200).json(standardResponse(201, 'Valoración creada', valoracion))
+    return response
+      .status(200)
+      .json(standardResponse(201, 'Valoración creada', { valoracion, receta }))
   }
 }

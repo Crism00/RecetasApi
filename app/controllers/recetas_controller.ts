@@ -52,4 +52,33 @@ export default class RecetasController {
       return response.status(500).json(standardResponse(500, error.message, { error }))
     }
   }
+
+  async show({ response, params }: HttpContext) {
+    const receta = await Receta.find(params.id)
+    receta?.load('comentarios')
+    if (!receta) {
+      return response.status(404).json(standardResponse(404, 'Receta no encontrada'))
+    }
+    return response
+      .status(200)
+      .json(standardResponse(200, 'Receta obtenida correctamente', { receta }))
+  }
+
+  async getUserRecipes({ response, auth }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.status(401).json(standardResponse(401, 'Usuario no autenticado'))
+    }
+    const recetas = await Receta.query().where('usuario_id', user.id).exec()
+    return response
+      .status(200)
+      .json(standardResponse(200, 'Recetas obtenidas correctamente', { recetas }))
+  }
+
+  async getTop5Recipes({ response }: HttpContext) {
+    const recetas = await Receta.query().orderBy('puntuacion_media', 'desc').limit(5).exec()
+    return response
+      .status(200)
+      .json(standardResponse(200, 'Recetas obtenidas correctamente', { recetas }))
+  }
 }

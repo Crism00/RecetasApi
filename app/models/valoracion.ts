@@ -7,10 +7,10 @@ export default class Valoracion extends BaseModel {
   declare id: number
 
   @column()
-  declare usuario_id: number
+  declare usuarioId: number
 
   @column()
-  declare receta_id: number
+  declare recetaId: number
 
   @column()
   declare puntuacion: number

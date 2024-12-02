@@ -35,4 +35,29 @@ export default class AuthController {
       .status(200)
       .json(standardResponse(200, 'Usuario logueado correctamente', { token }))
   }
+
+  async infoAuthUser({ auth, response }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.status(401).json(standardResponse(401, 'Usuario no autenticado'))
+    }
+    return response.status(200).json(standardResponse(200, 'Usuario autenticado', { user }))
+  }
+
+  async update({ request, response, auth }: HttpContext) {
+    const user = auth.user
+    if (!user) {
+      return response.status(401).json(standardResponse(401, 'Usuario no autenticado'))
+    }
+    const payload = request.only(['name', 'email'])
+    user.merge(payload)
+    if (await user.save()) {
+      return response
+        .status(200)
+        .json(standardResponse(200, 'Usuario actualizado correctamente', { user }))
+    }
+    return response
+      .status(500)
+      .json(standardResponse(500, 'Hubo un error al actualizar el usuario'))
+  }
 }
