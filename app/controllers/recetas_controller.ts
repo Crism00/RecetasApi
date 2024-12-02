@@ -22,21 +22,17 @@ export default class RecetasController {
     }
   }
   async index({ request, response }: HttpContext) {
-    try {
-      const payload = await request.validateUsing(storeValidator)
-      const receta = await Receta.create(payload)
-      if (receta) {
-        return response
-          .status(200)
-          .json(standardResponse(200, 'Receta creada correctamente', { receta }))
-      }
+    let recetasQuery = Receta.query().preload('user')
 
-      return response.status(500).json({
-        msg: 'Hubo un error al guardar la receta',
-      })
-    } catch (error) {
-      return response.status(500).json(standardResponse(500, error.message, { error }))
+    const categoria = request.qs().categoria
+    if (categoria) {
+      recetasQuery = recetasQuery.where('categoria_id', categoria)
     }
+
+    const recetas = await recetasQuery.exec()
+    return response
+      .status(200)
+      .json(standardResponse(200, 'Recetas obtenidas correctamente', { recetas }))
   }
 
   async update({ request, response, params }: HttpContext) {

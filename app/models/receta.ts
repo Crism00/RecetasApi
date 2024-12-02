@@ -1,8 +1,9 @@
 import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, column, hasOne } from '@adonisjs/lucid/orm'
+import { BaseModel, belongsTo, column, hasMany, hasOne } from '@adonisjs/lucid/orm'
 import Categoria from './categoria.js'
-import type { BelongsTo } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import User from './user.js'
+import Valoracion from './valoracion.js'
 
 export default class Receta extends BaseModel {
   @column({ isPrimary: true })
@@ -32,6 +33,9 @@ export default class Receta extends BaseModel {
   @column()
   declare imagen: string | null
 
+  @column()
+  declare puntuacion_media: number | null
+
   @belongsTo(() => Categoria, {
     foreignKey: 'categoria_id', // Nombre del campo que une la relación
   })
@@ -41,6 +45,9 @@ export default class Receta extends BaseModel {
     foreignKey: 'usuario_id', // Nombre del campo que une la relación
   })
   declare user: BelongsTo<typeof User>
+
+  @hasMany(() => Valoracion)
+  declare valoraciones: HasMany<typeof Valoracion>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

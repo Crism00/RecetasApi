@@ -14,6 +14,7 @@ export default class extends BaseSchema {
       table.string('tiempo_preparacion').notNullable()
       table.date('fecha_publicacion').notNullable()
       table.string('imagen').nullable()
+      table.float('puntuacion_media').nullable()
       table.timestamps()
     })
   }
