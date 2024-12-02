@@ -19,12 +19,11 @@ export default class ValoracionesController {
     } else {
       return response.status(401).json(standardResponse(401, 'Usuario no autenticado'))
     }
-    await valoracion.save()
 
     // Obtener la receta y todas sus valoraciones
     const receta = await Receta.findOrFail(payload.receta_id)
     const valoraciones = await receta.related('valoraciones').query()
-
+    await valoracion.save()
     // Calcular la puntuación media
     const puntuaciones = valoraciones.map((v) => v.puntuacion)
     const puntuacionMedia = puntuaciones.reduce((sum, val) => sum + val, 0) / puntuaciones.length

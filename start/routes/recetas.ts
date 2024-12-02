@@ -13,6 +13,10 @@ router.put('/recetas/:id', [RecetasController, 'update']).middleware(middleware.
 
 router.get('/recetas/user', [RecetasController, 'getUserRecipes']).middleware(middleware.auth())
 
-router.get('/recetas/:id', [RecetasController, 'show']).middleware(middleware.auth())
+router.get('/recetas/show/:id', [RecetasController, 'show']).middleware(middleware.auth())
 
 router.get('/recetas/top', [RecetasController, 'getTop5Recipes']).middleware(middleware.auth())
+
+router.post('/recetas/like/:id', [RecetasController, 'likeRecipe']).middleware(middleware.auth())
+
+router.get('/recetas/liked', [RecetasController, 'getLikedRecipes']).middleware(middleware.auth())
