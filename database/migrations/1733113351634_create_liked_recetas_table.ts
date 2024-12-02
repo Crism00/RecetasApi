@@ -8,8 +8,7 @@ export default class extends BaseSchema {
       table.increments('id')
       table.integer('receta_id').unsigned().references('recetas.id').onDelete('CASCADE')
       table.integer('usuario_id').unsigned().references('users.id').onDelete('CASCADE')
-      table.timestamp('created_at')
-      table.timestamp('updated_at')
+      table.timestamps()
     })
   }
 
