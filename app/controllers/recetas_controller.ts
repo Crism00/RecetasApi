@@ -23,7 +23,11 @@ export default class RecetasController {
     }
   }
   async index({ request, response }: HttpContext) {
-    let recetasQuery = Receta.query().preload('user')
+    let recetasQuery = Receta.query()
+      .preload('user')
+      .preload('comentarios', (q) => {
+        q.preload('usuario')
+      })
 
     const categoria = request.qs().categoria
     if (categoria) {
