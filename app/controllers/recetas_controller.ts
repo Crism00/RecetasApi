@@ -68,7 +68,9 @@ export default class RecetasController {
         q.where('usuario_id', receta.usuario_id)
       })
       await receta?.load('comentarios', (q) => {
-        q.preload('usuario').select('nombre')
+        q.preload('usuario', (u) => {
+          u.select('nombre')
+        })
       })
       var meGusta = false
       if (receta?.likedRecetas && receta?.likedRecetas.length > 0) {
