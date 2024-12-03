@@ -23,6 +23,10 @@ export default class ValoracionesController {
     // Obtener la receta y todas sus valoraciones
     const receta = await Receta.findOrFail(payload.receta_id)
     const valoraciones = await receta.related('valoraciones').query()
+    const userValoracion = valoraciones.find((v) => v.usuarioId === valoracion.usuarioId)
+    if (userValoracion) {
+      return response.status(400).json(standardResponse(400, 'Ya has valorado esta receta'))
+    }
     await valoracion.save()
     // Calcular la puntuación media
     const puntuaciones = valoraciones.map((v) => v.puntuacion)
