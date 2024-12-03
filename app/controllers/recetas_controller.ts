@@ -57,6 +57,7 @@ export default class RecetasController {
   async show({ response, params }: HttpContext) {
     const receta = await Receta.find(params.id)
     receta?.load('comentarios')
+    receta?.related('user').query().select('username')
     if (!receta) {
       return response.status(404).json(standardResponse(404, 'Receta no encontrada'))
     }
