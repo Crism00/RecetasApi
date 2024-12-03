@@ -49,7 +49,7 @@ export default class AuthController {
     if (!user) {
       return response.status(401).json(standardResponse(401, 'Usuario no autenticado'))
     }
-    const payload = request.only(['name', 'email'])
+    const payload = request.only(['name','biografia','imagen'])
     user.merge(payload)
     if (await user.save()) {
       return response
