@@ -114,10 +114,19 @@ export default class RecetasController {
     if (!receta) {
       return response.status(404).json(standardResponse(404, 'Receta no encontrada'))
     }
-    const likedReceta = new LikedReceta()
-    likedReceta.recetaId = receta.id
-    likedReceta.usuarioId = user.id
-    await likedReceta.save()
+    const likedReceta = await LikedReceta.query()
+      .where('usuario_id', user.id)
+      .andWhere('receta_id', receta.id)
+      .first()
+    if (likedReceta) {
+      await likedReceta.delete()
+      return response.status(200).json(standardResponse(200, 'Receta eliminada de favoritos'))
+    } else {
+      const newLikedReceta = new LikedReceta()
+      newLikedReceta.usuarioId = user.id
+      newLikedReceta.recetaId = receta.id
+      await newLikedReceta.save()
+    }
     return response.status(200).json(standardResponse(200, 'Receta añadida a favoritos'))
   }
 
