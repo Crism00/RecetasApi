@@ -29,9 +29,11 @@ export default class ValoracionesController {
     }
     await valoracion.save()
     // Calcular la puntuación media
+    var puntuacionMedia = payload.puntuacion
     const puntuaciones = valoraciones.map((v) => v.puntuacion)
-    const puntuacionMedia = puntuaciones.reduce((sum, val) => sum + val, 0) / puntuaciones.length
-
+    if (puntuaciones.length > 0) {
+      puntuacionMedia = puntuaciones.reduce((sum, val) => sum + val, 0) / puntuaciones.length
+    }
     // Actualizar la puntuación media de la receta
     receta.puntuacion_media = puntuacionMedia // Asegúrate de que la columna 'puntuacion_media' existe en el modelo
     await receta.save()

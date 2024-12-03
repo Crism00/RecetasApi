@@ -55,20 +55,33 @@ export default class RecetasController {
   }
 
   async show({ response, params }: HttpContext) {
-    const receta = await Receta.find(params.id)
-    receta?.load('valoraciones', (q) => {
-      q.where('usuario_id', receta.usuario_id)
-    })
-    const userName = await receta?.related('user').query().select('nombre').first()
-    if (!receta) {
-      return response.status(404).json(standardResponse(404, 'Receta no encontrada'))
-    }
-    return response.status(200).json(
-      standardResponse(200, 'Receta obtenida correctamente', {
-        receta,
-        userName: userName ? userName.nombre : null,
+    try {
+      const receta = await Receta.find(params.id)
+      await receta?.load('valoraciones', (q) => {
+        q.where('usuario_id', receta.usuario_id)
       })
-    )
+      await receta?.load('likedRecetas', (q) => {
+        q.where('usuario_id', receta.usuario_id)
+      })
+      await receta?.load('comentarios')
+      var meGusta = false
+      if (receta?.likedRecetas && receta?.likedRecetas.length > 0) {
+        meGusta = true
+      }
+      const userName = await receta?.related('user').query().select('nombre').first()
+      if (!receta) {
+        return response.status(404).json(standardResponse(404, 'Receta no encontrada'))
+      }
+      return response.status(200).json(
+        standardResponse(200, 'Receta obtenida correctamente', {
+          receta,
+          userName: userName ? userName.nombre : null,
+          meGusta,
+        })
+      )
+    } catch (error) {
+      return response.status(500).json(standardResponse(500, error.message, { error }))
+    }
   }
 
   async getUserRecipes({ response, auth }: HttpContext) {

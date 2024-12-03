@@ -2,7 +2,8 @@ import vine from '@vinejs/vine'
 
 export const storeValidator = vine.compile(
   vine.object({
-    recetaId: vine.number(),
+    receta_id: vine.number(),
     contenido: vine.string(),
+    usuario_id: vine.number().optional(),
   })
 )

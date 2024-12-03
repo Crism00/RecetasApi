@@ -4,9 +4,10 @@ import Comentario from '#models/comentario'
 import { standardResponse } from '../helpers/response.js'
 
 export default class ComentariosController {
-  async store({ request, response }: HttpContext) {
+  async store({ request, response, auth }: HttpContext) {
     try {
       const payload = await request.validateUsing(storeValidator)
+      payload.usuario_id = auth.user?.id
       const comentario = await Comentario.create(payload)
       if (comentario) {
         return response
